@@ -1,4 +1,3 @@
-import 'package:alerta_sudestada/src/current_value/current_value_card.dart';
 import 'package:alerta_sudestada/src/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

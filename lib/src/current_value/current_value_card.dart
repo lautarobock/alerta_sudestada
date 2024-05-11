@@ -1,52 +1,49 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class CurrentValueCard extends StatefulWidget {
-
+class CurrentValueCard extends StatelessWidget {
+  
   const CurrentValueCard({
     super.key,
-    required this.date,
-    required this.height,
+    this.date,
+    this.height,
+    this.up
   });
 
-  final DateTime date;
-  final double height;
+  final DateTime? date;
+  final double? height;
+  final bool? up;
   
   @override
-  State<CurrentValueCard> createState() => _CurrentValueCardState();
-}
-
-class _CurrentValueCardState extends State<CurrentValueCard> {
-  @override
   Widget build(BuildContext context) {
-    return Center(child: Card(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ListTile(
-            leading: const Icon(Icons.waves),
-            title: Text('Altura ${widget.height}m'),
-            subtitle: Text('${widget.date.hour}:${widget.date.minute}'),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              TextButton(
-                child: const Text('BUY TICKETS'),
-                onPressed: () {/* ... */},
-              ),
-              const SizedBox(width: 8),
-              TextButton(
-                child: const Text('LISTEN'),
-                onPressed: () {/* ... */},
-              ),
-              const SizedBox(width: 8),
-            ],
-          ),
-        ],
-      ),
-    ));
+    IconData icon;
+    Color color;
+    if (up == null) {
+      icon = Icons.remove;
+      color = Colors.grey;
+    } else if (up ?? false) {
+      icon = Icons.arrow_upward;
+      color = Colors.green;
+    } else {
+      icon = Icons.arrow_downward;
+      color = Colors.orange;
+    }
+    return Center(
+      heightFactor: 1,
+      child: Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(icon, color: color),
+              title: Text('${height}m', textAlign: TextAlign.center),
+              titleTextStyle: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.blue),
+              subtitle: Text(DateFormat('HH:mm').format(date ?? DateTime.now()), textAlign: TextAlign.center),
+              subtitleTextStyle: const TextStyle(fontSize: 20, color: Colors.blue),
+            )
+          ]
+        ),
+      )
+    );
   }
 }

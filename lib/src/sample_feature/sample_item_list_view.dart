@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 
 import '../settings/settings_view.dart';
-import 'sample_item.dart';
-import 'sample_item_details_view.dart';
 
 /// Displays a list of SampleItems.
 class SampleItemListView extends StatelessWidget {
   
-  SampleItemListView({
+  const SampleItemListView({
     super.key
   });
 
   static const routeName = '/';
 
-  final List<DataValue> items = [DataValue(date: DateTime.parse('2024-01-01'), height: 10.1)];
+  // final List<DataValue> items = [DataValue(date: DateTime.parse('2024-01-01'), height: 10.1)];
 
   @override
   Widget build(BuildContext context) {
