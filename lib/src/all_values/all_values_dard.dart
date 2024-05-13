@@ -34,10 +34,10 @@ class AllValuesCard extends StatelessWidget {
         if (item.reading != null) {
           text += ' [${item.reading}m]';
         }
-        IconData icon;
+        IconData? icon;
         Color color;
         if (index == 0) {
-          icon = Icons.remove;
+          icon = null;
           color = Colors.grey;
         } else if (item.astronomical > (tides[index - 1].astronomical)) {
           icon = Icons.arrow_upward;

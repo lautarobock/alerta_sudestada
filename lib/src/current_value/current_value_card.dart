@@ -36,9 +36,9 @@ class CurrentValueCard extends StatelessWidget {
           children: <Widget>[
             ListTile(
               leading: Icon(icon, color: color),
-              title: Text('${height}m', textAlign: TextAlign.center),
+              title: Text(height != null ? '${height}m' : '-', textAlign: TextAlign.center),
               titleTextStyle: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.blue),
-              subtitle: Text(DateFormat('HH:mm').format(date ?? DateTime.now()), textAlign: TextAlign.center),
+              subtitle: Text(date != null ? DateFormat('HH:mm').format(date!) : '-', textAlign: TextAlign.center),
               subtitleTextStyle: const TextStyle(fontSize: 20, color: Colors.blue),
             )
           ]

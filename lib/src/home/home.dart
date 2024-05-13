@@ -147,6 +147,13 @@ class _HomePageState extends State<HomePage> {
 
 
   Future<void> loadData() async {
+    setState(() {
+      readings = null;
+      astronomical = null;
+      last = null;
+      up = null;
+      forecast = null;
+    });
     final loginResponse = await login();
     if (loginResponse.statusCode == 200) {
       final token = jsonDecode(loginResponse.body)['access_token'];
@@ -180,8 +187,16 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Alturas Horarias del mareógrafo'),
+          leading: const Icon(Icons.waves),
+          title: const Text('Alerta Sudestada!'),
           actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              tooltip: 'Recargar',
+              onPressed: () {
+                loadData();
+              },
+            ),
             IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
@@ -190,16 +205,22 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        body: Column(
-          children: [
-            CurrentValueCard(date: last?.moment, height: last?.value, up: up),
-            HighLowTide(forecast: forecast),
-            AllValuesCard(
-              astronomical: astronomical ?? [],
-              readings: readings ?? [],
-            )
-          ],
-        ));
+        body: RefreshIndicator(
+          onRefresh: loadData,
+          color: Colors.white,
+          backgroundColor: Colors.blue,
+          child: Column(
+            children: [
+              CurrentValueCard(date: last?.moment, height: last?.value, up: up),
+              HighLowTide(forecast: forecast),
+              AllValuesCard(
+                astronomical: astronomical ?? [],
+                readings: readings ?? [],
+              )
+            ],
+          )
+        )
+      );
   }
 
 }
