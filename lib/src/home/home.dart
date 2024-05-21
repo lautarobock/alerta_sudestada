@@ -2,7 +2,10 @@ import 'dart:convert';
 
 import 'package:alerta_sudestada/src/all_values/all_values_dard.dart';
 import 'package:alerta_sudestada/src/current_value/current_value_card.dart';
+import 'package:alerta_sudestada/src/data.dart';
 import 'package:alerta_sudestada/src/high_low_tide/high_low_tide_card.dart';
+import 'package:alerta_sudestada/src/model.dart';
+import 'package:alerta_sudestada/src/weather/weather_card.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
@@ -89,6 +92,7 @@ class _HomePageState extends State<HomePage> {
   List<Tide>? readings;
   List<Tide>? astronomical;
   Forecast? forecast;
+  OpenWeatherMapModel? weather;
   
 
   login() {
@@ -145,7 +149,6 @@ class _HomePageState extends State<HomePage> {
         }));
   }
 
-
   Future<void> loadData() async {
     setState(() {
       readings = null;
@@ -153,6 +156,7 @@ class _HomePageState extends State<HomePage> {
       last = null;
       up = null;
       forecast = null;
+      weather = null;
     });
     final loginResponse = await login();
     if (loginResponse.statusCode == 200) {
@@ -162,12 +166,14 @@ class _HomePageState extends State<HomePage> {
         final forecastRes = await fetchForecast(token);
         if (forecastRes.statusCode == 200) {
           final res = Response.fromJson(jsonDecode(tidesResponse.body));
+          final w = await WeatherDataService.getWeather();
           setState(() {
             readings = res.tides.where((element) => element.type == 'reading').toList();
             astronomical = res.tides.where((element) => element.type == 'astronomical').toList();
             last = readings?.last;
             up = readings != null ? readings!.last.value > readings![readings!.length - 2].value : null;
             forecast = Forecast.fromJson(jsonDecode(forecastRes.body));  
+            weather = w;
           });  
         } else {
           throw Exception('Failed to load forecast');
@@ -213,6 +219,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               CurrentValueCard(date: last?.moment, height: last?.value, up: up),
               HighLowTide(forecast: forecast),
+              WeatherCard(data: weather),
               AllValuesCard(
                 astronomical: astronomical ?? [],
                 readings: readings ?? [],

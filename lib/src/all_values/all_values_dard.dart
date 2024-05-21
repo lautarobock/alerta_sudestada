@@ -60,9 +60,9 @@ class AllValuesCard extends StatelessWidget {
   _formatDate(DateTime date) {
     if (_isToday(date)) {
       return 'Hoy ${DateFormat('HH:mm').format(date)}';
-    } else if (date.isAfter(DateTime.now())){
+    } else if (date.toUtc().isAfter(DateTime.now().toUtc())){
       return 'Mañana ${DateFormat('HH:mm').format(date)}';
-    } else if (date.isBefore(DateTime.now())){
+    } else {
       return 'Ayer ${DateFormat('HH:mm').format(date)}';
     }    
   }
